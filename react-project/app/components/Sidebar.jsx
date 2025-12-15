@@ -23,6 +23,9 @@ export default function Sidebar() {
 				<Link href='/user/signout' className='hover:underline'>
 					Sign out
 				</Link>
+				<Link href='/articles' className='hover:underline'>
+					Articles
+				</Link>
 			</nav>
 		</aside>
 	);

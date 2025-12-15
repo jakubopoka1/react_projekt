@@ -5,6 +5,7 @@ import {
 	signInWithEmailAndPassword,
 	setPersistence,
 	browserSessionPersistence,
+	signOut,
 } from "firebase/auth";
 import { useSearchParams, useRouter } from "next/navigation";
 import { auth } from "@/app/lib/firebase";
@@ -12,7 +13,7 @@ import { auth } from "@/app/lib/firebase";
 export default function SignInPage() {
 	const params = useSearchParams();
 	const router = useRouter();
-	const returnUrl = params.get("returnUrl"); // może być null
+	const returnUrl = params.get("returnUrl");
 	const [error, setError] = useState("");
 
 	const onSubmit = (e) => {
@@ -24,12 +25,17 @@ export default function SignInPage() {
 
 		setPersistence(auth, browserSessionPersistence)
 			.then(() => signInWithEmailAndPassword(auth, email, password))
-			.then(() => {
-				// Zadanie 8: jeśli brak returnUrl -> idź na stronę główną
+			.then((cred) => {
+				const u = cred.user;
+
+				if (!u.emailVerified) {
+					localStorage.setItem("pendingVerificationEmail", u.email || "");
+					return signOut(auth).finally(() => router.push("/user/verify"));
+				}
+
 				router.push(returnUrl || "/");
 			})
 			.catch((err) => {
-				// Zadanie 8: pokaż błąd w UI (nie console.log)
 				setError(err?.message || "Nie udało się zalogować.");
 			});
 	};

@@ -14,7 +14,6 @@ export default function ProtectedLayout({ children }) {
 		}
 	}, [loading, user, returnUrl]);
 
-	// opcjonalnie: proste "loading..."
 	if (loading) return <div className='p-6'>Loading...</div>;
 
 	return <>{children}</>;

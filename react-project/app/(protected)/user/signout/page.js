@@ -2,15 +2,22 @@
 
 import { signOut } from "firebase/auth";
 import { auth } from "@/app/lib/firebase";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignOutPage() {
 	const router = useRouter();
 
-	useEffect(() => {
-		signOut(auth).finally(() => router.push("/"));
-	}, [router]);
+	const onSubmit = (e) => {
+		e.preventDefault();
+		signOut(auth);
+		router.push("/");
+	};
 
-	return <div className='p-6'>Wylogowywanie...</div>;
+	return (
+		<form onSubmit={onSubmit} className='p-6'>
+			<button className='border p-2 rounded' type='submit'>
+				Wyloguj
+			</button>
+		</form>
+	);
 }
