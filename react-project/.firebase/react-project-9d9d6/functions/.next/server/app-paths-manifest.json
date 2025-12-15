@@ -1,0 +1,14 @@
+{
+  "/(protected)/articles/page": "app/(protected)/articles/page.js",
+  "/(protected)/calendar/page": "app/(protected)/calendar/page.js",
+  "/(protected)/user/changepassword/page": "app/(protected)/user/changepassword/page.js",
+  "/(protected)/user/profile/page": "app/(protected)/user/profile/page.js",
+  "/(protected)/user/signout/page": "app/(protected)/user/signout/page.js",
+  "/(public)/user/register/page": "app/(public)/user/register/page.js",
+  "/(public)/user/signin/page": "app/(public)/user/signin/page.js",
+  "/(public)/user/verify/page": "app/(public)/user/verify/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js"
+}

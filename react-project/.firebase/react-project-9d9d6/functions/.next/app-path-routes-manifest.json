@@ -1,0 +1,14 @@
+{
+  "/(protected)/articles/page": "/articles",
+  "/(protected)/calendar/page": "/calendar",
+  "/(protected)/user/changepassword/page": "/user/changepassword",
+  "/(protected)/user/profile/page": "/user/profile",
+  "/(protected)/user/signout/page": "/user/signout",
+  "/(public)/user/register/page": "/user/register",
+  "/(public)/user/signin/page": "/user/signin",
+  "/(public)/user/verify/page": "/user/verify",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/"
+}

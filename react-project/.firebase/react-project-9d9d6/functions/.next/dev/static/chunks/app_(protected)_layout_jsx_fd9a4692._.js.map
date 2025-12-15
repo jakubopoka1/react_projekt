@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/jakubopoka/Desktop/WSEI/REACT_PROJEKT/react-project/app/%28protected%29/layout.jsx"],"sourcesContent":["\"use client\";\n\nimport { useAuth } from \"@/app/lib/AuthContext\";\nimport { useLayoutEffect } from \"react\";\nimport { redirect, usePathname } from \"next/navigation\";\n\nexport default function ProtectedLayout({ children }) {\n\tconst { user, loading } = useAuth();\n\tconst returnUrl = usePathname();\n\n\tuseLayoutEffect(() => {\n\t\tif (!loading && !user) {\n\t\t\tredirect(`/user/signin?returnUrl=${encodeURIComponent(returnUrl)}`);\n\t\t}\n\t}, [loading, user, returnUrl]);\n\n\tif (loading) return <div className='p-6'>Loading...</div>;\n\n\treturn <>{children}</>;\n}\n"],"names":[],"mappings":";;;;;AAEA;AACA;AACA;;;AAJA;;;;AAMe,SAAS,gBAAgB,EAAE,QAAQ,EAAE;;IACnD,MAAM,EAAE,IAAI,EAAE,OAAO,EAAE,GAAG,IAAA,uIAAO;IACjC,MAAM,YAAY,IAAA,oJAAW;IAE7B,IAAA,gLAAe;2CAAC;YACf,IAAI,CAAC,WAAW,CAAC,MAAM;gBACtB,IAAA,iJAAQ,EAAC,CAAC,uBAAuB,EAAE,mBAAmB,YAAY;YACnE;QACD;0CAAG;QAAC;QAAS;QAAM;KAAU;IAE7B,IAAI,SAAS,qBAAO,6LAAC;QAAI,WAAU;kBAAM;;;;;;IAEzC,qBAAO;kBAAG;;AACX;GAbwB;;QACG,uIAAO;QACf,oJAAW;;;KAFN"}}]
+}

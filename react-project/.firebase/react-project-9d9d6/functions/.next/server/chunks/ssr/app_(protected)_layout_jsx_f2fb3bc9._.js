@@ -1,0 +1,3 @@
+module.exports=[34649,a=>{"use strict";var b=a.i(87924),c=a.i(58058),d=a.i(72131),e=a.i(50944);function f({children:a}){let{user:f,loading:g}=(0,c.useAuth)(),h=(0,e.usePathname)();return((0,d.useLayoutEffect)(()=>{g||f||(0,e.redirect)(`/user/signin?returnUrl=${encodeURIComponent(h)}`)},[g,f,h]),g)?(0,b.jsx)("div",{className:"p-6",children:"Loading..."}):(0,b.jsx)(b.Fragment,{children:a})}a.s(["default",()=>f])}];
+
+//# sourceMappingURL=app_%28protected%29_layout_jsx_f2fb3bc9._.js.map
