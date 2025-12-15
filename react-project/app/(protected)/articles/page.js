@@ -10,7 +10,6 @@ import {
 	query,
 	where,
 	serverTimestamp,
-	orderBy,
 } from "firebase/firestore";
 
 export default function ArticlesPage() {
@@ -34,7 +33,6 @@ export default function ArticlesPage() {
 				collection(db, "articles"),
 				where("user", "==", user.uid)
 			);
-
 			const snap = await getDocs(q);
 			setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
 		} catch (e) {
@@ -73,37 +71,78 @@ export default function ArticlesPage() {
 		}
 	};
 
-	if (loading) return <div className='p-6'>Loading...</div>;
+	if (loading) {
+		return (
+			<div className='p-6'>
+				<span className='loading loading-spinner loading-md'></span>
+			</div>
+		);
+	}
 
 	return (
-		<div className='max-w-xl'>
-			<h1 className='text-2xl font-bold mb-4'>My articles</h1>
+		<div className='max-w-2xl'>
+			<div className='flex items-center justify-between mb-4'>
+				<h1 className='text-2xl font-bold'>My articles</h1>
+				<div className='badge badge-neutral'>{items.length}</div>
+			</div>
 
-			{error && <div className='mb-3 border p-3 rounded'>{error}</div>}
-			{msg && <div className='mb-3 border p-3 rounded'>{msg}</div>}
+			{error && (
+				<div className='alert alert-error mb-4'>
+					<span>{error}</span>
+				</div>
+			)}
 
-			<form onSubmit={onAdd} className='flex gap-2 mb-6'>
-				<input
-					className='border p-2 rounded flex-1'
-					placeholder='title'
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
-				/>
-				<button className='border p-2 rounded' type='submit'>
-					Add
-				</button>
-			</form>
+			{msg && (
+				<div className='alert alert-success mb-4'>
+					<span>{msg}</span>
+				</div>
+			)}
+
+			<div className='card bg-base-100 shadow border border-base-300 mb-6'>
+				<div className='card-body p-4'>
+					<h2 className='card-title text-base'>Add article</h2>
+
+					<form onSubmit={onAdd} className='flex flex-col gap-3 sm:flex-row'>
+						<input
+							className='input input-bordered w-full'
+							placeholder='Title'
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+						/>
+
+						<button className='btn btn-primary sm:w-32' type='submit'>
+							Add
+						</button>
+					</form>
+				</div>
+			</div>
 
 			{items.length === 0 ? (
-				<p>Brak rekordów.</p>
+				<div className='card bg-base-100 shadow border border-base-300'>
+					<div className='card-body p-4'>
+						<div className='text-sm opacity-70'>Brak rekordów.</div>
+					</div>
+				</div>
 			) : (
-				<ul className='list-disc pl-6'>
+				<div className='grid gap-3'>
 					{items.map((x) => (
-						<li key={x.id}>
-							<b>{x.title ?? x.id}</b>
-						</li>
+						<div
+							key={x.id}
+							className='card bg-base-100 shadow border border-base-300'>
+							<div className='card-body p-4'>
+								<div className='flex items-start justify-between gap-3'>
+									<div className='min-w-0'>
+										<div className='font-semibold truncate'>
+											{x.title ?? x.id}
+										</div>
+										<div className='text-xs opacity-60'>ID: {x.id}</div>
+									</div>
+									<div className='badge badge-outline'>article</div>
+								</div>
+							</div>
+						</div>
 					))}
-				</ul>
+				</div>
 			)}
 		</div>
 	);

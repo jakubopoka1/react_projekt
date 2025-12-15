@@ -1,35 +1,55 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/app/lib/AuthContext";
+
+function Item({ href, children }) {
+	const pathname = usePathname();
+	const active = pathname === href;
+	return (
+		<li>
+			<Link className={active ? "active" : ""} href={href}>
+				{children}
+			</Link>
+		</li>
+	);
+}
 
 export default function Sidebar() {
+	const { user } = useAuth();
+
 	return (
-		<aside className='w-64 border-r p-4'>
-			<div className='text-xl font-bold mb-6'>React Projekt</div>
-			<nav className='flex flex-col gap-3'>
-				<Link href='/' className='hover:underline'>
-					Home
-				</Link>
-				<Link href='/user/signin' className='hover:underline'>
-					Sign in
-				</Link>
-				<Link href='/user/register' className='hover:underline'>
-					Register
-				</Link>
-				<Link href='/user/profile' className='hover:underline'>
-					Profile
-				</Link>
-				<Link href='/user/changepassword' className='hover:underline'>
-					Change password
-				</Link>
-				<Link href='/user/signout' className='hover:underline'>
-					Sign out
-				</Link>
-				<Link href='/articles' className='hover:underline'>
-					Articles
-				</Link>
-				<Link href='/calendar' className='hover:underline'>
-					Calendar
-				</Link>
-			</nav>
+		<aside className='w-64 min-h-screen bg-base-100 border-r border-base-300'>
+			<div className='p-4 text-2xl font-bold'>React Projekt</div>
+
+			<ul className='menu px-4 gap-1'>
+				<Item href='/'>Home</Item>
+
+				{user && (
+					<>
+						<Item href='/calendar'>Calendar</Item>
+						<Item href='/articles'>Articles</Item>
+					</>
+				)}
+
+				<li className='menu-title mt-4'>User</li>
+
+				{!user && (
+					<>
+						<Item href='/user/signin'>Sign in</Item>
+						<Item href='/user/register'>Register</Item>
+					</>
+				)}
+
+				{user && (
+					<>
+						<Item href='/user/profile'>Profile</Item>
+						<Item href='/user/changepassword'>Change password</Item>
+						<Item href='/user/signout'>Sign out</Item>
+					</>
+				)}
+			</ul>
 		</aside>
 	);
 }

@@ -14,6 +14,7 @@ export default function RegisterPage() {
 	const { user } = useAuth();
 	const router = useRouter();
 	const [registerError, setRegisterError] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	if (user) return null;
 
@@ -31,6 +32,8 @@ export default function RegisterPage() {
 		}
 
 		try {
+			setLoading(true);
+
 			await createUserWithEmailAndPassword(auth, email, password);
 			await sendEmailVerification(auth.currentUser);
 
@@ -41,43 +44,78 @@ export default function RegisterPage() {
 			router.push("/user/verify");
 		} catch (err) {
 			setRegisterError(err?.message || "Błąd rejestracji.");
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
 		<div className='max-w-md mx-auto'>
-			<h1 className='text-2xl font-bold mb-4'>Register</h1>
+			<div className='card bg-base-100 shadow border border-base-300'>
+				<div className='card-body p-6'>
+					<h1 className='card-title text-lg'>Register</h1>
+					<p className='text-sm opacity-70'>
+						Utwórz konto, a następnie potwierdź e-mail.
+					</p>
 
-			{registerError && (
-				<div className='mb-3 border p-3 rounded'>{registerError}</div>
-			)}
+					{registerError && (
+						<div className='alert alert-error mt-3'>
+							<span>{registerError}</span>
+						</div>
+					)}
 
-			<form onSubmit={onSubmit} className='flex flex-col gap-3'>
-				<input
-					name='email'
-					type='email'
-					placeholder='Email'
-					className='border p-2 rounded'
-					required
-				/>
-				<input
-					name='password'
-					type='password'
-					placeholder='Hasło'
-					className='border p-2 rounded'
-					required
-				/>
-				<input
-					name='password2'
-					type='password'
-					placeholder='Powtórz hasło'
-					className='border p-2 rounded'
-					required
-				/>
-				<button className='border p-2 rounded' type='submit'>
-					Utwórz konto
-				</button>
-			</form>
+					<form onSubmit={onSubmit} className='mt-4 flex flex-col gap-3'>
+						<div className='form-control'>
+							<label className='label'>
+								<span className='label-text'>Email</span>
+							</label>
+							<input
+								name='email'
+								type='email'
+								placeholder='Email'
+								className='input input-bordered w-full'
+								required
+								disabled={loading}
+							/>
+						</div>
+
+						<div className='form-control'>
+							<label className='label'>
+								<span className='label-text'>Hasło</span>
+							</label>
+							<input
+								name='password'
+								type='password'
+								placeholder='Hasło'
+								className='input input-bordered w-full'
+								required
+								disabled={loading}
+							/>
+						</div>
+
+						<div className='form-control'>
+							<label className='label'>
+								<span className='label-text'>Powtórz hasło</span>
+							</label>
+							<input
+								name='password2'
+								type='password'
+								placeholder='Powtórz hasło'
+								className='input input-bordered w-full'
+								required
+								disabled={loading}
+							/>
+						</div>
+
+						<button
+							className='btn btn-primary mt-2'
+							type='submit'
+							disabled={loading}>
+							{loading ? "Tworzenie..." : "Utwórz konto"}
+						</button>
+					</form>
+				</div>
+			</div>
 		</div>
 	);
 }

@@ -178,21 +178,28 @@ export default function CalendarPage() {
 	const todayKey = toKey(new Date());
 
 	return (
-		<div className='p-6 text-black'>
-			<div className='flex justify-between items-center mb-4'>
-				<div className='flex gap-2 items-center'>
-					<button className='border px-3 py-2 bg-white' onClick={prevMonth}>
-						←
-					</button>
-					<button className='border px-3 py-2 bg-white' onClick={nextMonth}>
-						→
-					</button>
-					<div className='text-xl font-bold capitalize'>{monthLabel}</div>
+		<div className='p-6'>
+			<div className='flex flex-col gap-4 mb-4 md:flex-row md:items-center md:justify-between'>
+				<div className='flex items-center gap-2'>
+					<div className='join'>
+						<button
+							className='btn btn-outline btn-sm join-item'
+							onClick={prevMonth}>
+							←
+						</button>
+						<button
+							className='btn btn-outline btn-sm join-item'
+							onClick={nextMonth}>
+							→
+						</button>
+					</div>
+
+					<div className='text-2xl font-bold capitalize'>{monthLabel}</div>
 				</div>
 
-				<div className='flex gap-2'>
+				<div className='flex gap-2 items-center'>
 					<select
-						className='border px-2 py-2 bg-white'
+						className='select select-bordered select-sm'
 						value={monthIndex}
 						onChange={(e) => setMonthIndex(Number(e.target.value))}>
 						{Array.from({ length: 12 }).map((_, i) => (
@@ -206,7 +213,7 @@ export default function CalendarPage() {
 
 					<input
 						type='number'
-						className='border px-2 py-2 w-28 bg-white'
+						className='input input-bordered input-sm w-28'
 						value={year}
 						onChange={(e) => setYear(Number(e.target.value))}
 					/>
@@ -215,7 +222,7 @@ export default function CalendarPage() {
 
 			<div className='grid grid-cols-7 gap-2 mb-2'>
 				{WEEKDAYS.map((d) => (
-					<div key={d} className='font-semibold'>
+					<div key={d} className='text-sm font-semibold opacity-70 px-1'>
 						{d}
 					</div>
 				))}
@@ -230,13 +237,24 @@ export default function CalendarPage() {
 					return (
 						<div
 							key={idx}
-							className={`border rounded p-2 min-h-[120px] bg-white ${
-								!inMonth ? "opacity-40" : ""
-							} ${isToday ? "ring-2" : ""}`}>
-							<div className='flex justify-between mb-2'>
-								<b>{date.getDate()}</b>
+							className={[
+								"card bg-base-100 shadow-sm border border-base-300",
+								"p-2 min-h-[130px] overflow-hidden",
+								!inMonth ? "opacity-40" : "",
+								isToday ? "ring-2 ring-primary" : "",
+							].join(" ")}>
+							<div className='flex justify-between items-start gap-2 mb-2'>
+								<div className='flex items-center gap-2'>
+									<div className='font-bold text-base'>{date.getDate()}</div>
+									{list.length > 0 && (
+										<div className='badge badge-neutral badge-sm'>
+											{list.length}
+										</div>
+									)}
+								</div>
+
 								<button
-									className='border px-2 bg-white'
+									className='btn btn-primary btn-xs'
 									onClick={() => openAddModal(date)}>
 									+
 								</button>
@@ -244,24 +262,29 @@ export default function CalendarPage() {
 
 							<div className='flex flex-col gap-1'>
 								{list.length === 0 && (
-									<div className='text-xs text-gray-600'>Brak zadań</div>
+									<div className='text-xs opacity-60'>Brak zadań</div>
 								)}
+
 								{list.map((t) => (
 									<button
 										key={t.id}
-										className='border px-2 py-1 text-left bg-white hover:bg-gray-100'
+										className='btn btn-ghost btn-sm justify-start text-left normal-case h-auto py-1'
 										onClick={() => openEditModal(key, t)}>
-										<div className='flex justify-between'>
-											<span className='font-medium'>{t.title}</span>
-											{t.time && (
-												<span className='text-xs text-gray-600'>{t.time}</span>
+										<div className='w-full'>
+											<div className='flex justify-between gap-2'>
+												<span className='font-medium truncate'>{t.title}</span>
+												{t.time && (
+													<span className='text-xs opacity-70 shrink-0'>
+														{t.time}
+													</span>
+												)}
+											</div>
+											{t.desc && (
+												<div className='text-xs opacity-70 truncate'>
+													{t.desc}
+												</div>
 											)}
 										</div>
-										{t.desc && (
-											<div className='text-xs text-gray-700 truncate'>
-												{t.desc}
-											</div>
-										)}
 									</button>
 								))}
 							</div>
@@ -271,43 +294,52 @@ export default function CalendarPage() {
 			</div>
 
 			{modalOpen && (
-				<div className='fixed inset-0 bg-black/40 flex items-center justify-center'>
-					<div className='bg-white p-4 rounded w-full max-w-md'>
-						<h2 className='font-bold mb-2'>
+				<div className='modal modal-open'>
+					<div className='modal-box'>
+						<h2 className='font-bold text-lg mb-3'>
 							{editingTaskId ? "Edytuj" : "Dodaj"} zadanie
 						</h2>
 
-						<input
-							className='border p-2 w-full mb-2'
-							placeholder='Tytuł'
-							value={formTitle}
-							onChange={(e) => setFormTitle(e.target.value)}
-						/>
-						<input
-							className='border p-2 w-full mb-2'
-							placeholder='Godzina'
-							value={formTime}
-							onChange={(e) => setFormTime(e.target.value)}
-						/>
-						<textarea
-							className='border p-2 w-full mb-2'
-							placeholder='Opis'
-							value={formDesc}
-							onChange={(e) => setFormDesc(e.target.value)}
-						/>
+						<div className='space-y-2'>
+							<input
+								className='input input-bordered w-full'
+								placeholder='Tytuł'
+								value={formTitle}
+								onChange={(e) => setFormTitle(e.target.value)}
+							/>
+							<input
+								className='input input-bordered w-full'
+								placeholder='Godzina (np. 14:30)'
+								value={formTime}
+								onChange={(e) => setFormTime(e.target.value)}
+							/>
+							<textarea
+								className='textarea textarea-bordered w-full'
+								placeholder='Opis'
+								value={formDesc}
+								onChange={(e) => setFormDesc(e.target.value)}
+							/>
+						</div>
 
-						<div className='flex justify-between'>
-							{editingTaskId && (
-								<button className='border px-3 py-2' onClick={deleteTask}>
+						<div className='modal-action flex justify-between w-full'>
+							{editingTaskId ? (
+								<button
+									type='button'
+									className='btn btn-error'
+									onClick={deleteTask}>
 									Usuń
 								</button>
+							) : (
+								<div />
 							)}
+
 							<div className='flex gap-2'>
-								<button className='border px-3 py-2' onClick={closeModal}>
+								<button type='button' className='btn' onClick={closeModal}>
 									Anuluj
 								</button>
 								<button
-									className='border px-3 py-2'
+									type='button'
+									className='btn btn-primary'
 									onClick={saveTask}
 									disabled={!formTitle.trim()}>
 									Zapisz
@@ -315,6 +347,8 @@ export default function CalendarPage() {
 							</div>
 						</div>
 					</div>
+
+					<div className='modal-backdrop' onClick={closeModal} />
 				</div>
 			)}
 		</div>
