@@ -26,6 +26,9 @@ export default function Sidebar() {
 				<Link href='/articles' className='hover:underline'>
 					Articles
 				</Link>
+				<Link href='/calendar' className='hover:underline'>
+					Calendar
+				</Link>
 			</nav>
 		</aside>
 	);
